@@ -1,47 +1,44 @@
-let post = document.getElementById('btnPost');
-let clear = document.getElementById('btnClear');
-let mark = document.getElementById('btnMark');
-let del = document.getElementById('btnDelete');
+let todoArray = [];
+//Post element into the list
 
-post.addEventListener('click',obtenerDatos);
-clear.addEventListener('click',todoClear);
-mark.addEventListener('click',todoMark);
-del.addEventListener('click',todoDel);
+const obtenerDatos = (e) => {
+  e.preventDefault();
+  let areaField = $("#todoText").val();
+  if (areaField != "") {
+    todoArray.push(areaField);
+    $("#todoList").append(`
+    <p>
+      <input type="checkbox" id="post" style="margin-right:5px"/>
+      <label> ${todoArray[todoArray.length -1]}</label>
+    </p>`);
+    $("#todoText").val("");
+  }
+};
 
-var values = document.getElementById("todoList");
+const marcaTodos = (e) => {
+  e.preventDefault();
+  $("#todoList #post").each(function () {
+    $(this).prop("checked", true);
+  });
+};
 
-function obtenerDatos(e) {
-    e.preventDefault();
+const desMarcaTodos = (e) => {
+  e.preventDefault();
+  $("#todoList #post").each(function () {
+    $(this).prop("checked", false);
+  });
+};
 
-    var newT = document.getElementById("todoText").value; 
-    var listOfTo = document.getElementById("todoList");
+const deleteAll = (e) => {
+  e.preventDefault();
+  todoArray = [];
+  $("#todoList").empty();
+};
 
-    let currentList = listOfTo.innerHTML;
-    listOfTo.innerHTML = currentList + `<input type = "checkbox" id="post" name="todo" /> ${newT} <br> `
-    
-}
+$("#btnPost").on("click", obtenerDatos)
 
-function todoClear(e) {
-    e.preventDefault();
+$("#btnMark").on("click", marcaTodos)
 
-    let elements = values.querySelectorAll("#post");
-    elements.forEach((x) => {
-      x.checked = false;
-    });
+$("#btnClear").on("click", desMarcaTodos)
 
-}
-
-function todoMark(e) {
-    e.preventDefault();
-
-    let elements = values.querySelectorAll("#post");
-    elements.forEach((x) => {
-      x.checked = true;
-    });
-}
-
-function todoDel(e) {
-    e.preventDefault();
-
-    document.getElementById("todoList").innerHTML = "";
-}
+$("#btnDelete").on("click", deleteAll)
